@@ -1,6 +1,6 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import todo_icon from "../assets/todo_icon.png";
-import TodoItems from "./Todoitems.jsx";
+import TodoItems from "./TodoItems.jsx";
 
 const Todo = () => {
   const [todoList, setTodoList] = useState([]);
@@ -22,10 +22,28 @@ const Todo = () => {
     setTodoList((prev) => [...prev, newTodo]);
     inputRef.current.value = "";
   };
+  const deleteTodo = (id) => {
+    setTodoList((prvTodos) => {
+      return prvTodos.filter((todo) => todo.id !== id);
+    });
+  };
 
+  const toggle = (id) => {
+    setTodoList((prevTodos) => {
+      return prevTodos.map((todo) => {
+        if (todo.id === id) {
+          return { ...todo, isComplete: !todo.isComplete };
+        }
+        return todo;
+      });
+    });
+  };
+useEffect(()=>{
+  console.log(todoList)
+}, [todoList])
   return (
     <div className="bg-white place-self-center w-11/12 max-w-md flex flex-col p-7 min-h-[550px] rounded-lg">
-      {/* --------------------------- TITLE --------------------------- */}
+      {/* --------------------------- Title --------------------------- */}
       <div className="flex items-center mt-7 gap-2">
         <img className="w-10 h-10" src={todo_icon} alt="" />
         <h1 className="text-black text-3xl font-semibold">To-Do List</h1>
@@ -54,7 +72,16 @@ cursor-pointer"
       {/* --------------------------- Todo list --------------------------- */}
       <div>
         {todoList.map((item, index) => {
-          return <TodoItems key={item.id} text={item.text} />;
+          return (
+            <TodoItems
+              key={item.id}
+              text={item.text}
+              id={item.id}
+              isComplete={item.isComplete}
+              deleteTodo={deleteTodo}
+              toggle={toggle}
+            />
+          );
         })}
       </div>
     </div>

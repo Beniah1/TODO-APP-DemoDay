@@ -17,11 +17,12 @@ const Todo = () => {
     const newTodo = {
       id: Date.now(),
       text: inputText,
-      isCompleted: false,
+      isComplete: false, // corrected property name
     };
     setTodoList((prev) => [...prev, newTodo]);
     inputRef.current.value = "";
   };
+
   const deleteTodo = (id) => {
     setTodoList((prvTodos) => {
       return prvTodos.filter((todo) => todo.id !== id);
@@ -38,9 +39,11 @@ const Todo = () => {
       });
     });
   };
-useEffect(()=>{
-  console.log(todoList)
-}, [todoList])
+
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todoList));
+  }, [todoList]);
+
   return (
     <div className="bg-white place-self-center w-11/12 max-w-md flex flex-col p-7 min-h-[550px] rounded-lg">
       {/* --------------------------- Title --------------------------- */}
